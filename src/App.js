@@ -1,40 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
-
-// const dummyList = [
-//   {
-//     id: 1,
-//     author: '신지운',
-//     content: '123',
-//     emotion: 5,
-//     created_at: new Date().getTime()
-//   },
-//   {
-//     id: 2,
-//     author: '신지현',
-//     content: '123',
-//     emotion: 5,
-//     created_at: new Date().getTime()
-//   },
-//   {
-//     id: 3,
-//     author: '이남길',
-//     content: '123',
-//     emotion: 5,
-//     created_at: new Date().getTime()
-//   },
-//   {
-//     id: 4,
-//     author: '신민성',
-//     content: '123',
-//     emotion: 5,
-//     created_at: new Date().getTime()
-//   },
-// ]
-
-// https://jsonplaceholder.typicode.com/comments
 
 
 function App() {
@@ -61,7 +28,7 @@ function App() {
     getData();
   }, [])
 
-  const onCreate = (author, content, emotion) => {
+  const onCreate = useCallback((author, content, emotion) => {
     const created_at = new Date().getTime();
     const newitem = {
       author,
@@ -71,8 +38,8 @@ function App() {
       id: dataId.current
     }
     dataId.current += 1;
-    setData([newitem, ...data]);
-  };
+    setData((data) => [newitem, ...data]);
+  }, []);
 
   const onRemove = (targetId) => {
     const newDiaryList = data.filter((it) => it.id !== targetId);
@@ -84,6 +51,8 @@ function App() {
       data.map((it) => it.id === targetId ? { ...it, content: newContent } : it)
     )
   }
+
+
 
   return (
     <div className="App">
